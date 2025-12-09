@@ -7,7 +7,7 @@
   set text(
     lang: "ru",
     size: 14pt,
-    font: "Times New Roman"
+    // font: "Times New Roman"
   )
 
   set heading(
@@ -144,6 +144,13 @@
   pagebreak()
 }
 
+#let figure_image(path, caption: none, width: 100%) = {
+  figure(
+    caption: if caption != none [ -- #caption] else [],
+    image(path, width: width)
+  )
+}
+
 #let listing_code(body, caption: none) = {
   let listing_counter = counter("listing")
   listing_counter.step()
@@ -170,6 +177,9 @@
 #let listing_code_file(path, caption: none) = {
   let filename = path.split("/").last()
   caption = if caption == none [Файл #filename] else [#caption]
+  if path.first() != "/" {
+    path = "/" + path
+  }
   let code = raw(read(path))
   listing_code(code, caption: caption)
 }
