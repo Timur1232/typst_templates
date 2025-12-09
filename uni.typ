@@ -7,6 +7,7 @@
   set text(
     lang: "ru",
     size: 14pt,
+    font: "Times New Roman"
   )
 
   set heading(
@@ -58,6 +59,22 @@
   doc
 }
 
+#let to-string(it) = {
+  if type(it) == str {
+    it
+  } else if type(it) != content {
+    str(it)
+  } else if it.has("text") {
+    it.text
+  } else if it.has("children") {
+    it.children.map(to-string).join()
+  } else if it.has("body") {
+    to-string(it.body)
+  } else if it == [ ] {
+    " "
+  }
+}
+
 #let mod(a, b) = int(calc.floor((a - (b * int(calc.floor(a / b))))))
 
 #let my_name = [Баймурадов Т. Р.]
@@ -89,8 +106,7 @@
 
   v(6em)
 
-  align(right)[ВТШ «СПИ»\
-    Факультет информационных технологий]
+  align(right)[Институт информационных технологий]
 
   v(4em)
 
@@ -128,13 +144,13 @@
   pagebreak()
 }
 
-#let listing_code(body: none, caption: none) = {
+#let listing_code(body, caption: none) = {
   let listing_counter = counter("listing")
   listing_counter.step()
   let current_number = context listing_counter.display()
 
   [
-    Листинг #current_number - #caption
+    Листинг #current_number -- #caption
     #parbreak()
     #text(
       font: "Linux Libertine Mono O",
@@ -144,7 +160,7 @@
           first-line-indent: (amount: 1.25cm, all: true),
           hanging-indent: 1.25cm,
           leading: 0.5em,
-          body
+          body,
         )
       ]
     )
@@ -155,17 +171,18 @@
   let filename = path.split("/").last()
   caption = if caption == none [Файл #filename] else [#caption]
   let code = raw(read(path))
-  listing_code(body: text(code), caption: caption)
+  listing_code(code, caption: caption)
 }
 
-#let figure_image(path, caption: none) = {
+#let figure_img(path, caption: none, width: 100%) = {
   figure(
     caption: if caption != none [ -- #caption] else [],
-    image(path)
+    image(path, width: width),
   )
 }
 
 #let attachments(..args) = {
+  counter("listing").update(0)
   let attachments_counter = counter("attachments")
   set heading(
     numbering: none,
@@ -194,10 +211,26 @@
     }
     let type = path.split(".").last()
     if type in image_types {
-      figure_image(path, caption: caption)
+      figure_img(path, caption: caption)
     } else {
       listing_code_file(path, caption: caption)
     }
     v(2em)
   }
+}
+
+#let simple_header(number: 1, lab_name: none) = {
+  counter(heading).update(number - 1)
+  align(
+    center,
+  )[
+    #block(
+      below: 1em,
+      heading(
+        numbering: (..nums) => [],
+        [ЛАБОРТОРНАЯ РАБОТА №#number],
+      )
+    )
+    «#lab_name»
+  ]
 }
