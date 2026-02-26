@@ -216,13 +216,6 @@
   listing_code(code, caption: caption)
 }
 
-#let figure_img(path, caption: none, width: 100%) = {
-  figure(
-    caption: if caption != none [ -- #caption] else [],
-    image(path, width: width),
-  )
-}
-
 #let attachments(..args) = {
   counter("listing").update(0)
   let attachments_counter = counter("attachments")
@@ -253,7 +246,7 @@
     }
     let type = path.split(".").last()
     if type in image_types {
-      figure_img(path, caption: caption)
+      figure_image(path, caption: caption)
     } else {
       listing_code_file(path, caption: caption)
     }
