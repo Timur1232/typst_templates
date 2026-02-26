@@ -56,6 +56,21 @@
     [Рисунок #fig-num #it.body]
   }
 
+  show raw.where(block: true): it => {
+    text(
+      font: "Iosevka Term",
+      size: 10pt,
+      [
+        #par(
+          first-line-indent: (amount: 1.25cm, all: true),
+          hanging-indent: 1.25cm,
+          leading: 0.5em,
+          it.text,
+        )
+      ]
+    )
+  }
+
   doc
 }
 
@@ -100,6 +115,7 @@
 #let БД = [Управление данными]
 #let NET = [Платформа .Net]
 #let ИКСС = [Инфокоммуникационные системы и сети]
+#let ТОИ = [Технологии обработки информации]
 
 #let front_page(
   lab_number: 1,
