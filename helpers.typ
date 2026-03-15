@@ -38,12 +38,16 @@
   if path.first() != "/" {
     path = "/" + path
   }
-  let code = raw(read(path), block: true, align: left)
-  figure(code, caption: caption)
+  // counter(raw).step()
+  figure(
+    caption: caption,
+    kind: raw,
+    raw(read(path), block: true, align: left),
+  )
 }
 
 #let appendix(..args) = {
-  counter(raw).update(0)
+  counter(raw).update(1)
   let attachments_counter = counter("attachments")
   set heading(
     numbering: none,
