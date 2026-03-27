@@ -71,11 +71,27 @@
     )
   }
 
-  show figure.caption.where(kind: image): it => {
-    let fig-num = context counter(image).display()
+  // Чтобы правильно вывести подпись и номер для рисунка,
+  // с чем-то кроме image (например, grid, table и тд),
+  // то нужно в figure добавить:
+  //
+  // ```typst
+  // #figure(
+  //   ...
+  //   kind: image,
+  //   supplement: none,
+  //   grid(...),
+  //   ...
+  // )
+  // ```
+  let figure_image = it => {
+    let fig-num = context counter("image").display()
+    counter("image").step()
     let cap = if it.body != [] [ -- #it.body] else []
     [Рисунок #fig-num #cap]
   }
+  show figure.caption.where(kind: image): figure_image
+  show figure.caption.where(kind: "image"): figure_image
 
   counter(table).update(1)
   show figure.where(kind: table): it => {
