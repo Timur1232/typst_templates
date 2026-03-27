@@ -38,12 +38,8 @@
   if path.first() != "/" {
     path = "/" + path
   }
-  // counter(raw).step()
-  figure(
-    caption: caption,
-    kind: raw,
-    raw(read(path), block: true, align: left),
-  )
+  let code = read(path)
+  figure(raw(code, block: true, align: left), caption: caption)
 }
 
 #let appendix(..args) = {
