@@ -126,5 +126,7 @@
     }
   }
 
+  counter("appendix").update(0)
+
   doc
 }

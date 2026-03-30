@@ -42,9 +42,27 @@
   figure(raw(code, block: true, align: left), caption: caption)
 }
 
+#let appendix_head() = {
+  let attachments_counter = counter("appendix")
+
+  let num(n) = {
+    let letters = ("А", "Б", "В", "Г", "Д", "Е")
+    return if n <= 6 { letters.at(n - 1) } else { num(calc.ceil(n / 6) - 1) + num(mod(n, 6)) }
+  }
+
+  attachments_counter.step()
+  let app_num = context attachments_counter.display(num)
+
+  align(center, heading(
+    numbering: none,
+    [ПРИЛОЖЕНИЕ #app_num],
+  ))
+  v(2.5em)
+}
+
 #let appendix(..args) = {
   counter(raw).update(1)
-  let attachments_counter = counter("attachments")
+  let attachments_counter = counter("appendix")
   set heading(
     numbering: none,
   )
