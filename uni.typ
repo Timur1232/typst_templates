@@ -2,6 +2,18 @@
 #import "./data.typ": *
 #import "./helpers.typ": *
 
+#let figure_raw_style(it, numbering_prefix: "") = {
+  let fig-num = context counter(raw).display()
+  let cap = if it.caption != none [ -- #it.caption.body] else []
+  [
+  #align(left, [
+    Листинг #numbering_prefix#fig-num #cap
+    #parbreak()
+    #it.body
+  ])
+]
+}
+
 #let uni_style(doc) = {
   set page(
     paper: "a4",
@@ -105,17 +117,7 @@
   }
 
   counter(raw).update(1)
-  show figure.where(kind: raw): it => {
-    let fig-num = context counter(raw).display()
-    let cap = if it.caption != none [ -- #it.caption.body] else []
-    [
-      #align(left, [
-        Листинг #fig-num #cap
-        #parbreak()
-        #it.body
-      ])
-    ]
-  }
+  show figure.where(kind: raw): figure_raw_style
 
   set math.equation(numbering: "(1)", supplement: none)
   show ref: it => {
