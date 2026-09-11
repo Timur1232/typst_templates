@@ -2,8 +2,10 @@
 #import "./data.typ": *
 #import "./helpers.typ": *
 
-#let figure_raw_style(it, numbering_prefix: "") = {
-  let fig-num = context counter(raw).display()
+// Usage:
+// #show figure: it => figure_appendix_style(it, numberind_prefix: "А.")
+#let figure_appendix_style(it, numbering_prefix: "") = {
+  let fig-num = context counter(it.kind).display()
   let cap = if it.caption != none [ -- #it.caption.body] else []
   [
   #align(left, [
@@ -12,6 +14,12 @@
     #it.body
   ])
 ]
+}
+
+#let appendix_ref(label, kind, prefix, letter: "А") = context {
+  let loc = locate(label)
+  let nums = counter(kind).at(loc)
+  link(loc, [#prefix #letter.#nums.at(0)])
 }
 
 #let uni_style(doc) = {
@@ -117,7 +125,7 @@
   }
 
   counter(raw).update(1)
-  show figure.where(kind: raw): figure_raw_style
+  show figure.where(kind: raw): figure_appendix_style
 
   set math.equation(numbering: "(1)", supplement: none)
   show ref: it => {
